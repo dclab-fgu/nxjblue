@@ -1,19 +1,17 @@
 
 import lejos.nxt.comm.Bluetooth;
 
-import NodeServer;
-
 public class Handheld {
-    private static final String DEVICES[] = {
-        "car",
-        "shooter"
-    };
+    private NodeServer node;
 
-    NodeServer node;
+    private void start() {
+        node = new NodeServer();
+    } //  start()
 
     public static void main(String[] args) {
-        node = new NodeServer(DEVICES);
-
+        Handheld held = new Handheld();
+        
+        held.start();
     } // main()
 } // Handheld
 
