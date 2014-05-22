@@ -48,6 +48,18 @@ public class HeldLeft extends Handheld {
                 node.send(Catapult.CMD_SHOOT);
             } // stateChange()
         });
+
+        SensorPort.S1.addSensorPortListener(new SensorPortListener() {
+            public void stateChanged(
+                SensorPort source, int oldValue, int value
+            ) {
+                if (value == RELEASED) {
+                    return;
+                } // fi
+
+                node.send(Catapult.CMD_STOP);
+            } // stateChange()
+        });
     } // setupButtons()
 
     public void start() {
