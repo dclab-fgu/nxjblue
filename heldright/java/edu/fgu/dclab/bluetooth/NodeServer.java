@@ -1,15 +1,15 @@
 
-package edu.fgu.dclab;
+package edu.fgu.dclab.bluetooth;
 
 import lejos.nxt.comm.Bluetooth;
 
 public class NodeServer extends Node {
-    public NodeServer() {
+    public void init() {
         connection = Bluetooth.waitForConnection();
 
         dos = connection.openDataOutputStream();
         dis = connection.openDataInputStream();
-    } // NodeServer
+    } // init()
 } // NodeServer
 
-// end of NodeServer.java
+// NodeServer.java

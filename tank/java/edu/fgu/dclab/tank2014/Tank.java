@@ -1,20 +1,21 @@
 
-package edu.fgu.dclab;
+package edu.fgu.dclab.tank2014;
 
 import lejos.nxt.LCD;
 
-public class Handheld {
-    private static final String HANDHELD = "Carol";
+import edu.fgu.dclab.bluetooth.NodeServer;
+
+public class Tank {
     private NodeServer node;
 
-    public Handheld() {
+    public Tank() {
         node = new NodeServer();
-    } // Handheld()
+    } // Tank()
 
     public void run() {
         int cmd = 0;
 
-        node.init();
+        node.connect(HANDHELD);
 
         while (true) {
             cmd = node.readCmd();
@@ -27,10 +28,10 @@ public class Handheld {
     } //  start()
 
     public static void main(String[] args) {
-        Handheld handheld = new Handheld();
+        Tank tank = new Tank();
         
-        handheld.run();
+        tank.run();
     } // main()
-} // Handheld
+} // Tank
 
-// Handheld.java
+// Tank.java

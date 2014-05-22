@@ -1,5 +1,5 @@
 
-package edu.fgu.dclab;
+package edu.fgu.dclab.bluetooth;
 
 import java.io.IOException;
 
@@ -17,19 +17,6 @@ public class NodeClient extends Node {
         dos = connection.openDataOutputStream();
         dis = connection.openDataInputStream();
     } // connect()
-
-    public int readCmd() {
-        int cmd = 0;
-
-        try {
-            cmd = dis.readInt();
-        }
-        catch (IOException e) {
-            LCD.drawString("Write Exception", 0, 0);
-        }
-
-        return cmd;
-    } // readCmd()
 } // NodeClient
 
-// end of Node.java
+// NodeClient.java
