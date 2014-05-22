@@ -10,7 +10,7 @@ import lejos.nxt.SensorPortListener;
 
 import edu.fgu.dclab.handheld.Handheld;
 
-public class HeldLeft extends Handheld {
+public class HeldCatapult extends Handheld {
     private static final String SERVER = "Gary";
 
     private static final int RELEASED = 1023;
@@ -18,9 +18,10 @@ public class HeldLeft extends Handheld {
     private boolean connected = false;
 //    private TouchSensor s2;
 
-    public HeldLeft() {
+    public HeldCatapult() {
         Button.ENTER.addButtonListener(new ButtonListener() {
             public void buttonPressed(Button b) {
+                LCD.clear();
                 LCD.drawString("connecting...", 0, 0);
 
                 node.connect(SERVER);
@@ -34,7 +35,10 @@ public class HeldLeft extends Handheld {
                 LCD.clear();
             } // buttonReleased()
         });
-    } // HeldLeft()
+
+        LCD.drawString("press ENTER to", 0, 0);
+        LCD.drawString("connect...", 0, 1);
+    } // HeldCatapult()
 
     private void setupButtons() {
         SensorPort.S2.addSensorPortListener(new SensorPortListener() {
@@ -49,7 +53,7 @@ public class HeldLeft extends Handheld {
             } // stateChange()
         });
 
-        SensorPort.S1.addSensorPortListener(new SensorPortListener() {
+        SensorPort.S3.addSensorPortListener(new SensorPortListener() {
             public void stateChanged(
                 SensorPort source, int oldValue, int value
             ) {
@@ -73,10 +77,10 @@ public class HeldLeft extends Handheld {
     } //  start()
 
     public static void main(String[] args) {
-        HeldLeft handheld = new HeldLeft();
+        HeldCatapult handheld = new HeldCatapult();
 
         handheld.start();
     } // main()
-} // HeldLeft
+} // HeldCatapult
 
-// HeldLeft.java
+// HeldCatapult.java

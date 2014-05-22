@@ -20,7 +20,11 @@ public class Catapult {
     } // Catapult()
 
     public void start() {
+        LCD.drawString("Waiting", 0, 0);
+
         node.init();
+
+        LCD.drawString("Connected", 0, 0);
 
         while (true) {
             int cmd = node.receive();
@@ -42,20 +46,14 @@ public class Catapult {
         Motor.C.backward();
     } // shoot()
 
-    void turn_on() {
-        Motor.A.setSpeed(50);
-        Motor.A.backward();
-        Delay.msDelay(150);
-    } // turn_on()
-      
     void action(int cmd) {
         switch (cmd) { 
-            case CMD_SHOOT: 
+            case Catapult.CMD_SHOOT: 
                 shoot();
 
                 break;
 
-            case CMD_STOP: 
+            case Catapult.CMD_STOP: 
                 stop();
 
                 break; 
