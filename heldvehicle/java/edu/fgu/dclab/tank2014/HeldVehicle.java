@@ -18,14 +18,19 @@ public class HeldVehicle extends Handheld {
 
     private static final int RELEASED = 1023;
 
-//    private boolean connected = false;
-    private boolean connected = true;
+    private boolean connected = false;
+    private boolean running = false;
+
     private int countA = 0;
     private int countC = 0;
     private int readingA = 0;
     private int readingC = 0;
     private int oldReadingA = 0;
     private int oldReadingC = 0;
+    private int velocity = 0;
+    private int oldVelocity = 0;
+    private int angleVelocity = 0;
+    private int oldAngleVelocity = 0;
 
     public HeldVehicle() {
         Button.ENTER.addButtonListener(new ButtonListener() {
@@ -59,16 +64,16 @@ public class HeldVehicle extends Handheld {
 
         countA += (readingA - oldReadingA);
 
-        if (countA > 75) {
-            countA = 75;
+        if (countA > 150) {
+            countA = 150;
         } 
-        else if (countA < -75) {
-            countA = -75;
+        else if (countA < -150) {
+            countA = -150;
         } // fi
 
         oldReadingA = readingA;
 
-        return (countA + 75);
+        return (150 - countA) * (Vehicle.BASE_VELOCITY / 200);
     } // accelerate()
 
     private int steering() {
@@ -76,16 +81,16 @@ public class HeldVehicle extends Handheld {
 
         countC += (readingC - oldReadingC);
 
-        if (countC > 75) {
-            countC = 75;
+        if (countC > 30) {
+            countC = 30;
         } 
-        else if (countC < -75) {
-            countC = -75;
+        else if (countC < -30) {
+            countC = -30;
         } // fi
 
         oldReadingC = readingC;
 
-        return (countC + 75);
+        return (30 - countC) * 10 + 200;
     } // steering()
 
     private void setupButtons() {
@@ -97,7 +102,14 @@ public class HeldVehicle extends Handheld {
                     return;
                 } // fi
 
-                node.send(Vehicle.CMD_BACKWARD);
+                if (running) {
+                    running = false;
+
+                    node.send(Vehicle.CMD_STOP);
+                } // fi
+                else {
+                    node.send(Vehicle.CMD_REVERSE);
+                } // esle
             } // stateChange()
         });
 
@@ -109,10 +121,22 @@ public class HeldVehicle extends Handheld {
                     return;
                 } // fi
 
-                node.send(Vehicle.CMD_FORWARD);
+                node.send(Vehicle.CMD_RUN);
+
+                running = true;
             } // stateChange()
         });
     } // setupButtons()
+
+    private void setup() {
+        resetTachoCount();
+
+        angleVelocity = steering();
+        oldAngleVelocity = angleVelocity;
+
+        velocity = accelerate();
+        oldVelocity = velocity;
+    } // setup();
 
     public void start() {
         while (!connected) {
@@ -122,11 +146,33 @@ public class HeldVehicle extends Handheld {
         LCD.drawString("connected", 0, 0);
 
         resetTachoCount();
+//        setup();
 
         while (true) {
             LCD.clear();
             LCD.drawInt(accelerate(), 0, 1);
+            LCD.drawInt(accelerate() | Vehicle.CMD_ACCELERATE, 0, 2);
             LCD.drawInt(steering(), 0, 3);
+            LCD.drawInt(steering() | Vehicle.CMD_STEERING, 0, 4);
+
+            velocity = accelerate();
+
+            if (velocity != oldVelocity) {
+                node.send(velocity | Vehicle.CMD_ACCELERATE);
+
+                oldVelocity = velocity;
+            } //
+
+            Delay.msDelay(100);
+
+            angleVelocity = steering();
+
+            if (angleVelocity == oldAngleVelocity) {
+                node.send(angleVelocity | Vehicle.CMD_STEERING);
+
+                oldAngleVelocity = angleVelocity;
+            } // fi
+
             Delay.msDelay(100);
         } // od
     } //  start()
