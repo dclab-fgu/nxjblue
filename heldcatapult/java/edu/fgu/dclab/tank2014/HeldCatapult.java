@@ -24,7 +24,7 @@ public class HeldCatapult extends Handheld {
                 LCD.drawString("connecting...", 0, 0);
 
                 node.connect(SERVER);
-                
+
                 setupButtons();
 
                 connected = true;
