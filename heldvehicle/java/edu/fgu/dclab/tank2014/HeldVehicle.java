@@ -10,14 +10,14 @@ import lejos.nxt.SensorPortListener;
 
 import edu.fgu.dclab.handheld.Handheld;
 
-public class HeldCatapult extends Handheld {
-    private static final String SERVER = "Gary";
+public class HeldVehicle extends Handheld {
+    private static final String SERVER = "Beth";
 
     private static final int RELEASED = 1023;
 
     private boolean connected = false;
 
-    public HeldCatapult() {
+    public HeldVehicle() {
         Button.ENTER.addButtonListener(new ButtonListener() {
             public void buttonPressed(Button b) {
                 LCD.clear();
@@ -37,51 +37,34 @@ public class HeldCatapult extends Handheld {
 
         LCD.drawString("press ENTER to", 0, 0);
         LCD.drawString("connect...", 0, 1);
-    } // HeldCatapult()
+    } // HeldVehicle()
 
-    private void setupButtons() {
-        SensorPort.S2.addSensorPortListener(new SensorPortListener() {
-            public void stateChanged(
-                SensorPort source, int oldValue, int value
-            ) {
-                if (value == RELEASED) {
-                    return;
-                } // fi
-
-                node.send(Catapult.CMD_SHOOT);
-            } // stateChange()
-        });
-
-        SensorPort.S3.addSensorPortListener(new SensorPortListener() {
-            public void stateChanged(
-                SensorPort source, int oldValue, int value
-            ) {
-                if (value == RELEASED) {
-                    return;
-                } // fi
-
-                node.send(Catapult.CMD_STOP);
-            } // stateChange()
-        });
-    } // setupButtons()
+    private resetTachoCount() {
+        MotorPort.A.resetTachoCount();
+        MotorPort.C.resetTachoCount();
+    } // resetTacho()
 
     public void start() {
+        int speed;
+
         while (!connected) {
             ;
         } // od
 
         LCD.drawString("connected", 0, 0);
 
+        resetTachoCount();
+
         while (true) {
-            ;
+            node.send(Catapult.CMD_STOP);            
         } // od
     } //  start()
 
     public static void main(String[] args) {
-        HeldCatapult handheld = new HeldCatapult();
+        HeldVehicle handheld = new HeldVehicle();
 
         handheld.start();
     } // main()
-} // HeldCatapult
+} // HeldVehicle
 
-// HeldCatapult.java
+// HeldVehicle.java
