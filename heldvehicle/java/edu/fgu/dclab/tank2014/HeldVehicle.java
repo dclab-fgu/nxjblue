@@ -145,8 +145,8 @@ public class HeldVehicle extends Handheld {
 
         LCD.drawString("connected", 0, 0);
 
-        resetTachoCount();
-//        setup();
+//        resetTachoCount();
+        setup();
 
         while (true) {
             LCD.clear();
@@ -167,7 +167,7 @@ public class HeldVehicle extends Handheld {
 
             angleVelocity = steering();
 
-            if (angleVelocity == oldAngleVelocity) {
+            if (angleVelocity != oldAngleVelocity) {
                 node.send(angleVelocity | Vehicle.CMD_STEERING);
 
                 oldAngleVelocity = angleVelocity;

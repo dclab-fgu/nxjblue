@@ -93,8 +93,6 @@ public class Vehicle {
     } // accelerate()
 
     private void steering(int velocity) {
-        stop();
-
         Motor.B.setSpeed(BASE_VELOCITY / 2);
         Motor.C.setSpeed(velocity);
 
